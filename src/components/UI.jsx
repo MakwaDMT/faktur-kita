@@ -1,5 +1,30 @@
 import { useApp } from '../context/AppContext'
 
+// ── MoneyInput ──────────────────────────────────────────────────
+// Shows thousand-separator dots while typing (e.g. 5000000 -> 5.000.000)
+// Always reports the raw numeric value via onChange, never the formatted string.
+export function MoneyInput({ value, onChange, className, placeholder, ...rest }) {
+  const formatDisplay = (raw) => {
+    const num = parseFloat((raw ?? '').toString().replace(/[^\d]/g, '')) || 0
+    return num === 0 ? '' : num.toLocaleString('id-ID')
+  }
+  return (
+    <input
+      type="text"
+      inputMode="numeric"
+      className={className}
+      placeholder={placeholder}
+      value={formatDisplay(value)}
+      onChange={e => {
+        const digitsOnly = e.target.value.replace(/[^\d]/g, '')
+        onChange(digitsOnly === '' ? 0 : parseInt(digitsOnly, 10))
+      }}
+      {...rest}
+    />
+  )
+}
+
+
 // ── Topbar ──────────────────────────────────────────────────────
 export function Topbar({ title, onBack, right, color }) {
   const bg = color || '#085041'

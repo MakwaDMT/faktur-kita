@@ -321,7 +321,7 @@ export default function Profile() {
                   <div className="text-[10px] font-medium" style={{ color: hText }}>{f.bizName || 'Nama Usaha Anda'}</div>
                   <div className="text-[8px]" style={{ color: hSub }}>FAKTUR</div>
                 </div>
-                <div className="text-[10px] font-medium" style={{ color: hText }}>IDR 5.000.000</div>
+                <div className="text-[10px] font-medium" style={{ color: hText }}>Rp 0</div>
               </div>
               {/* gradient bar */}
               <div style={{ height:3, background: dark
@@ -336,16 +336,16 @@ export default function Profile() {
                   <span>Barang</span><span>Jumlah</span>
                 </div>
                 <div className="flex justify-between text-[9px] text-slate-600 py-1">
-                  <span>Jasa Desain</span><span>5.000.000</span>
+                  <span>Jasa Desain</span><span>0</span>
                 </div>
                 <div className="flex justify-between text-[10px] font-medium text-slate-800 pt-1 border-t border-slate-200">
-                  <span>Total</span><span>IDR 5.000.000</span>
+                  <span>Total</span><span>Rp 0</span>
                 </div>
               </div>
               {/* mini balance */}
               <div className="flex items-center justify-between px-3 py-1.5" style={{ background: f.color }}>
                 <span className="text-[8px] uppercase" style={{ color: hSub }}>Sisa tagihan</span>
-                <span className="text-[10px] font-medium" style={{ color: hText }}>IDR 2.000.000</span>
+                <span className="text-[10px] font-medium" style={{ color: hText }}>Rp 0</span>
               </div>
             </div>
           </div>

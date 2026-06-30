@@ -286,7 +286,7 @@ export const calcInvoice = (items = [], discountVal = 0, discountType = 'fixed',
 }
 
 // ─── FORMAT ─────────────────────────────────────────────────────
-export const fmtIDR = (n) => 'IDR ' + Math.round(n || 0).toLocaleString('id-ID')
+export const fmtIDR = (n) => 'Rp ' + Math.round(n || 0).toLocaleString('id-ID')
 export const fmtShort = (n) => {
   n = Math.round(n || 0)
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace('.0', '') + 'jt'

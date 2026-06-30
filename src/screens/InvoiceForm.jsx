@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useApp } from '../context/AppContext'
-import { Section, Field, Input, BalanceBlock } from '../components/UI'
+import { Section, Field, Input, BalanceBlock, MoneyInput } from '../components/UI'
 import { ProfileDB, ClientDB, ProductDB, calcInvoice, fmtIDR, today, daysFromNow } from '../utils/db'
 import SignatureCanvas from 'react-signature-canvas'
 
@@ -258,9 +258,9 @@ export default function InvoiceForm() {
                   <div><label className={labelCls}>Jml</label>
                     <input className={inputCls} type="number" min="0" value={it.qty}
                       onChange={e=>updItem(it.id,'qty',e.target.value)}/></div>
-                  <div><label className={labelCls}>Harga (IDR)</label>
-                    <input className={inputCls} type="number" min="0" value={it.rate||''}
-                      placeholder="0" onChange={e=>updItem(it.id,'rate',e.target.value)}/></div>
+                  <div><label className={labelCls}>Harga (Rp)</label>
+                    <MoneyInput className={inputCls} value={it.rate}
+                      placeholder="0" onChange={v=>updItem(it.id,'rate',v)}/></div>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <select className="text-[11px] px-2 py-1 rounded-lg border border-slate-200 bg-white text-slate-500"
@@ -297,9 +297,14 @@ export default function InvoiceForm() {
             ))}
           </div>
           <div className="mt-3">
-            <label className={labelCls}>{discType==='pct'?'Diskon (%)':'Jumlah diskon (IDR)'}</label>
-            <input className={inputCls} type="number" min="0" value={form.discountVal||''}
-              placeholder="0" onChange={e=>upd('discountVal',parse(e.target.value))}/>
+            <label className={labelCls}>{discType==='pct'?'Diskon (%)':'Jumlah diskon (Rp)'}</label>
+            {discType==='pct' ? (
+              <input className={inputCls} type="number" min="0" max="100" value={form.discountVal||''}
+                placeholder="0" onChange={e=>upd('discountVal',parse(e.target.value))}/>
+            ) : (
+              <MoneyInput className={inputCls} value={form.discountVal}
+                placeholder="0" onChange={v=>upd('discountVal',v)}/>
+            )}
           </div>
         </Section>
 
@@ -319,9 +324,9 @@ export default function InvoiceForm() {
           icon={ic('<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>')}
           title="Ongkos kirim">
           <div className="mt-3">
-            <label className={labelCls}>Biaya pengiriman (IDR)</label>
-            <input className={inputCls} type="number" min="0" value={form.shipping||''}
-              placeholder="0" onChange={e=>upd('shipping',parse(e.target.value))}/>
+            <label className={labelCls}>Biaya pengiriman (Rp)</label>
+            <MoneyInput className={inputCls} value={form.shipping}
+              placeholder="0" onChange={v=>upd('shipping',v)}/>
           </div>
         </Section>
 
@@ -348,9 +353,9 @@ export default function InvoiceForm() {
                   </button>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div><label className={labelCls}>Jumlah (IDR)</label>
-                    <input className={inputCls} type="number" min="0" value={p.amount||''}
-                      placeholder="0" onChange={e=>updPmt(i,'amount',e.target.value)}/></div>
+                  <div><label className={labelCls}>Jumlah (Rp)</label>
+                    <MoneyInput className={inputCls} value={p.amount}
+                      placeholder="0" onChange={v=>updPmt(i,'amount',v)}/></div>
                   <div><label className={labelCls}>Tanggal</label>
                     <input className={inputCls} type="date" value={p.date}
                       onChange={e=>updPmt(i,'date',e.target.value)}/></div>

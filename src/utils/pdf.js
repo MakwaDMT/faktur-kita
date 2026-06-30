@@ -294,8 +294,8 @@ ${headerNotes.length ? `
       <th style="width:22px">#</th>
       <th>Barang / Jasa</th>
       <th class="r" style="width:38px">Jml</th>
-      <th class="r" style="width:88px">Harga (IDR)</th>
-      <th class="r" style="width:96px">Jumlah (IDR)</th>
+      <th class="r" style="width:88px">Harga (Rp)</th>
+      <th class="r" style="width:96px">Jumlah (Rp)</th>
     </tr></thead>
     <tbody>
       ${(items || []).map((it, i) => `
@@ -319,7 +319,7 @@ ${headerNotes.length ? `
     ${discount > 0 ? `<div class="tl"><span>Diskon${discountPct ? ` (${discountPct}%)` : ''}</span><span>−${(discount||0).toLocaleString('id-ID')}</span></div>` : ''}
     ${tax > 0 ? `<div class="tl"><span>Pajak (PPN ${taxPct}%)</span><span>${(tax||0).toLocaleString('id-ID')}</span></div>` : ''}
     ${shipping > 0 ? `<div class="tl"><span>Ongkos kirim</span><span>${(shipping||0).toLocaleString('id-ID')}</span></div>` : ''}
-    <div class="tl grand"><span>Total</span><span>IDR ${(total||0).toLocaleString('id-ID')}</span></div>
+    <div class="tl grand"><span>Total</span><span>Rp ${(total||0).toLocaleString('id-ID')}</span></div>
   </div>
 </div>
 
@@ -327,7 +327,7 @@ ${headerNotes.length ? `
   <div class="bal-inner">
     <div>
       <div class="bal-lbl">${status === 'paid' ? 'Lunas' : 'Sisa tagihan'}</div>
-      <div class="bal-amt">IDR ${Math.abs(balance||0).toLocaleString('id-ID')}</div>
+      <div class="bal-amt">Rp ${Math.abs(balance||0).toLocaleString('id-ID')}</div>
     </div>
     <span class="badge">${status === 'paid' ? '✓ Lunas' : status === 'partial' ? 'Sebagian' : 'Belum bayar'}</span>
   </div>
@@ -337,7 +337,7 @@ ${payments && payments.length ? `
 <div class="sec" style="padding-top:0">
   <div class="sec-title">Pembayaran diterima</div>
   <table class="pay-tbl">
-    <thead><tr><th>Tanggal</th><th>Metode</th><th>Catatan</th><th class="r">Jumlah (IDR)</th></tr></thead>
+    <thead><tr><th>Tanggal</th><th>Metode</th><th>Catatan</th><th class="r">Jumlah (Rp)</th></tr></thead>
     <tbody>
       ${payments.map(p => `<tr>
         <td>${p.date||''}</td><td>${p.method||''}</td><td>${p.note||''}</td>
@@ -403,8 +403,8 @@ export function buildWhatsAppMsg(invoice, profile) {
 Berikut invoice dari *${bizName}*:
 
 📄 *Invoice: ${num}*
-💰 Total: *IDR ${(total || 0).toLocaleString('id-ID')}*
-${paid > 0 ? `✅ Sudah dibayar: IDR ${paid.toLocaleString('id-ID')}\n` : ''}💳 Sisa tagihan: *IDR ${Math.max(0, balance || 0).toLocaleString('id-ID')}*
+💰 Total: *Rp ${(total || 0).toLocaleString('id-ID')}*
+${paid > 0 ? `✅ Sudah dibayar: Rp ${paid.toLocaleString('id-ID')}\n` : ''}💳 Sisa tagihan: *Rp ${Math.max(0, balance || 0).toLocaleString('id-ID')}*
 📅 Jatuh tempo: ${due}
 
 ${bank ? `Pembayaran via:\n🏦 Bank ${bank.bank}: ${bank.account}\n   a/n ${bank.name}` : ''}

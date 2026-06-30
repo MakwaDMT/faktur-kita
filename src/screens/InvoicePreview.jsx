@@ -23,8 +23,8 @@ export default function InvoicePreview() {
   }
 
   const sendEmail = () => {
-    const sub  = encodeURIComponent(`Invoice ${inv.num} — IDR ${(inv.total||0).toLocaleString('id-ID')}`)
-    const body = encodeURIComponent(`Dear ${inv.clientName},\n\nPlease find invoice ${inv.num} attached.\n\nTotal: IDR ${(inv.total||0).toLocaleString('id-ID')}\nDue: ${inv.due}\n\nThank you.`)
+    const sub  = encodeURIComponent(`Invoice ${inv.num} — Rp ${(inv.total||0).toLocaleString('id-ID')}`)
+    const body = encodeURIComponent(`Dear ${inv.clientName},\n\nPlease find invoice ${inv.num} attached.\n\nTotal: Rp ${(inv.total||0).toLocaleString('id-ID')}\nDue: ${inv.due}\n\nThank you.`)
     window.location.href = `mailto:${inv.clientEmail || ''}?subject=${sub}&body=${body}`
     setShowSend(false)
   }

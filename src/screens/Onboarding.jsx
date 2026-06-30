@@ -158,15 +158,15 @@ export function ReportsScreen() {
     </style></head><body>
     <h1>Invoice Report — ${new Date().toLocaleString('default',{month:'long',year:'numeric'})}</h1>
     <div style="margin:16px 0">
-      <div class="stat"><div class="stat-v">IDR ${stats.totalInvoiced.toLocaleString('id-ID')}</div><div class="stat-l">Invoiced</div></div>
-      <div class="stat"><div class="stat-v">IDR ${stats.totalTerkumpul.toLocaleString('id-ID')}</div><div class="stat-l">Terkumpul</div></div>
-      <div class="stat"><div class="stat-v">IDR ${stats.outstanding.toLocaleString('id-ID')}</div><div class="stat-l">Belum dibayar</div></div>
+      <div class="stat"><div class="stat-v">Rp ${stats.totalInvoiced.toLocaleString('id-ID')}</div><div class="stat-l">Invoiced</div></div>
+      <div class="stat"><div class="stat-v">Rp ${stats.totalTerkumpul.toLocaleString('id-ID')}</div><div class="stat-l">Terkumpul</div></div>
+      <div class="stat"><div class="stat-v">Rp ${stats.outstanding.toLocaleString('id-ID')}</div><div class="stat-l">Belum dibayar</div></div>
       <div class="stat"><div class="stat-v">${stats.totalCount}</div><div class="stat-l">Total invoices</div></div>
     </div>
     <h2>All invoices</h2>
     <table><thead><tr><th>#</th><th>Client</th><th>Date</th><th class="r">Total</th><th class="r">Paid</th><th>Status</th></tr></thead>
     <tbody>${sorted.map((inv,i) => `<tr><td>${inv.num}</td><td class="b">${inv.clientName}</td><td>${inv.date}</td>
-      <td class="r">IDR ${(inv.total||0).toLocaleString('id-ID')}</td><td class="r">IDR ${(inv.paid||0).toLocaleString('id-ID')}</td>
+      <td class="r">Rp ${(inv.total||0).toLocaleString('id-ID')}</td><td class="r">Rp ${(inv.paid||0).toLocaleString('id-ID')}</td>
       <td>${inv.status}</td></tr>`).join('')}</tbody></table>
     </body></html>`
     const win = window.open('','_blank')
