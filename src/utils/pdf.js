@@ -67,7 +67,7 @@ export function buildInvoiceHTML(invoice, profile, template = 'classic') {
   const headerNotes = notes.filter(n => n.type === 'header')
   const footerNotes = notes.filter(n => n.type === 'footer')
 
-  const docTitle = (invoice.docType === 'quotation') ? 'Quotation' : 'Invoice'
+  const docTitle = (invoice.docType === 'quotation') ? 'Penawaran' : 'Faktur'
 
   // template-specific style overrides
   const templateCSS = {
@@ -257,13 +257,13 @@ export function buildInvoiceHTML(invoice, profile, template = 'classic') {
 <div class="bar-spacer"></div>
 
 <div class="meta-row">
-  <div class="meta-cell"><div class="mk">Invoice date</div><div class="mv">${date}</div></div>
-  <div class="meta-cell"><div class="mk">Due date</div><div class="mv due">${due}</div></div>
+  <div class="meta-cell"><div class="mk">Tanggal faktur</div><div class="mv">${date}</div></div>
+  <div class="meta-cell"><div class="mk">Jatuh tempo</div><div class="mv due">${due}</div></div>
 </div>
 
 <div class="bill-row">
   <div class="bc">
-    <div class="bk">Bill to</div>
+    <div class="bk">Tagihan untuk</div>
     <div class="bn">${clientName || '—'}</div>
     <div class="bd">
       ${clientAddr ? clientAddr.replace(/\n/g,'<br>') + '<br>' : ''}
@@ -273,7 +273,7 @@ export function buildInvoiceHTML(invoice, profile, template = 'classic') {
     </div>
   </div>
   <div class="bc">
-    <div class="bk">Invoice from</div>
+    <div class="bk">Faktur dari</div>
     <div class="bn">${bizName}</div>
     <div class="bd">
       ${bizAddr ? bizAddr + '<br>' : ''}
@@ -292,10 +292,10 @@ ${headerNotes.length ? `
   <table class="items">
     <thead><tr>
       <th style="width:22px">#</th>
-      <th>Item / Service</th>
-      <th class="r" style="width:38px">Qty</th>
-      <th class="r" style="width:88px">Rate (IDR)</th>
-      <th class="r" style="width:96px">Amount (IDR)</th>
+      <th>Barang / Jasa</th>
+      <th class="r" style="width:38px">Jml</th>
+      <th class="r" style="width:88px">Harga (IDR)</th>
+      <th class="r" style="width:96px">Jumlah (IDR)</th>
     </tr></thead>
     <tbody>
       ${(items || []).map((it, i) => `
@@ -326,18 +326,18 @@ ${headerNotes.length ? `
 <div class="bal-sec">
   <div class="bal-inner">
     <div>
-      <div class="bal-lbl">${status === 'paid' ? 'Fully paid' : 'Balance due'}</div>
+      <div class="bal-lbl">${status === 'paid' ? 'Lunas' : 'Sisa tagihan'}</div>
       <div class="bal-amt">IDR ${Math.abs(balance||0).toLocaleString('id-ID')}</div>
     </div>
-    <span class="badge">${status === 'paid' ? '✓ Paid' : status === 'partial' ? 'Partial' : 'Unpaid'}</span>
+    <span class="badge">${status === 'paid' ? '✓ Lunas' : status === 'partial' ? 'Sebagian' : 'Belum bayar'}</span>
   </div>
 </div>
 
 ${payments && payments.length ? `
 <div class="sec" style="padding-top:0">
-  <div class="sec-title">Payments received</div>
+  <div class="sec-title">Pembayaran diterima</div>
   <table class="pay-tbl">
-    <thead><tr><th>Date</th><th>Method</th><th>Note</th><th class="r">Amount (IDR)</th></tr></thead>
+    <thead><tr><th>Tanggal</th><th>Metode</th><th>Catatan</th><th class="r">Jumlah (IDR)</th></tr></thead>
     <tbody>
       ${payments.map(p => `<tr>
         <td>${p.date||''}</td><td>${p.method||''}</td><td>${p.note||''}</td>
@@ -355,7 +355,7 @@ ${footerNotes.length ? `
 
 <div class="bottom-row">
   <div class="bank-col">
-    <div class="bank-title">Payment via bank transfer</div>
+    <div class="bank-title">Pembayaran via transfer bank</div>
     ${banks.length ? banks.map(b => `
       <div class="bank-row">
         <div class="bank-badge">${b.bank.slice(0,3).toUpperCase()}</div>
@@ -364,10 +364,10 @@ ${footerNotes.length ? `
           <div class="bank-name">a/n ${b.name} · ${b.bank}</div>
         </div>
       </div>`).join('') : `
-      <div style="font-size:10px;color:#aaa;">Add bank accounts in Settings → Profile</div>`}
+      <div style="font-size:10px;color:#aaa;">Tambah rekening bank di Pengaturan → Profil</div>`}
   </div>
   <div class="sig-col">
-    <div class="sig-title">Authorized signature</div>
+    <div class="sig-title">Tanda tangan</div>
     <div class="sig-line">
       ${sigData ? `<img src="${sigData}" style="max-height:38px;max-width:130px;object-fit:contain"/>` : ''}
     </div>
@@ -378,7 +378,7 @@ ${footerNotes.length ? `
 
 <div class="footer">
   <div class="footer-txt">${bizName}${bizEmail ? ' · ' + bizEmail : ''}${bizPhone ? '<br>' + bizPhone : ''}</div>
-  <div class="footer-thx">Thank you! 🙏</div>
+  <div class="footer-thx">Terima kasih! 🙏</div>
 </div>
 
 </body>

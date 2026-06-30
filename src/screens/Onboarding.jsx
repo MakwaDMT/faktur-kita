@@ -595,22 +595,17 @@ export function SettingsScreen() {
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Data</div>
       <div className="bg-white border-t border-b border-slate-200">
-        <Row icon="💾" title="Ekspor cadangan" sub="Unduh semua data sebagai JSON" onClick={doBackup} />
-        <Row icon="📥" title="Impor cadangan" sub="Pulihkan dari file JSON" onClick={() => fileRef.current?.click()} />
+        <Row icon="💾" title="Ekspor cadangan" sub="Unduh semua data Anda" onClick={doBackup} />
+        <Row icon="📥" title="Impor cadangan" sub="Pulihkan dari file cadangan" onClick={() => fileRef.current?.click()} />
         <input ref={fileRef} type="file" accept=".json" onChange={doRestore} className="hidden" />
       </div>
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Akun</div>
       <div className="bg-white border-t border-b border-slate-200">
         <Row icon="👑" title="Langganan" sub={`Uji coba gratis — ${trialDays} hari tersisa`} subColor="#854F0B" onClick={() => navigate('paywall')} />
-        <Row icon="🌐" title="Language / Bahasa"
-          sub={lang === 'id' ? 'Bahasa Indonesia' : 'English'}
-          onClick={() => {
-            const newLang = lang === 'id' ? 'en' : 'id'
-            setLang(newLang)
-            showToast(newLang === 'id' ? 'Bahasa Indonesia dipilih ✓' : 'English selected ✓')
-            setTimeout(() => window.location.reload(), 800)
-          }} />
+        <Row icon="🌐" title="Bahasa / Language"
+          sub="Bahasa Indonesia"
+          onClick={() => showToast('Mode Bahasa Inggris sedang dikembangkan')} />
         <Row icon="📋" title="Syarat & Kebijakan Privasi" sub="Hukum yang berlaku: Republik Indonesia" onClick={() => showToast('Membuka syarat & ketentuan…')} />
       </div>
 
@@ -628,9 +623,9 @@ export function PaywallScreen() {
   const { navigate, trialDays, showToast } = useApp()
   const [selected, setSelected] = useState('yearly')
   const plans = [
-    { id:'monthly',   name:'Bulanan',   price:'Rp 59.000',  period:'/month',    equiv:'',                   badge:'' },
-    { id:'quarterly', name:'3 Bulan',  price:'Rp 149.000', period:'/3 months', equiv:'≈ Rp 49.700/month',  badge:'Hemat 16%' },
-    { id:'yearly',    name:'Tahunan',    price:'Rp 479.000', period:'/year',     equiv:'≈ Rp 39.900/month',  badge:'Paling hemat' },
+    { id:'monthly',   name:'Bulanan',  price:'Rp 35.000',  period:'/bulan',     equiv:'',                   badge:'' },
+    { id:'quarterly', name:'3 Bulan',  price:'Rp 89.000',  period:'/3 bulan',   equiv:'≈ Rp 29.700/bulan',  badge:'Hemat 15%' },
+    { id:'yearly',    name:'Tahunan',  price:'Rp 299.000', period:'/tahun',     equiv:'≈ Rp 24.900/bulan',  badge:'Paling hemat' },
   ]
   return (
     <div className="flex flex-col min-h-full">

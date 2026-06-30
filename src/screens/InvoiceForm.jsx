@@ -57,7 +57,7 @@ export default function InvoiceForm() {
 
   // product catalog picker
   const allProducts = ProductDB.getAll()
-  const [showProductPicker, setShowProductPicker] = useState(null) // item id
+  const [showProductPicker, setShowProductPicker] = useState(null)
   const [productQuery, setProductQuery] = useState('')
   const filteredProducts = productQuery
     ? allProducts.filter(p => p.name?.toLowerCase().includes(productQuery.toLowerCase()))
@@ -72,7 +72,6 @@ export default function InvoiceForm() {
     setProductQuery('')
   }
 
-  // auto-save new products from invoice items
   const autoSaveProducts = () => {
     form.items.forEach(it => {
       if (it.name && it.rate > 0 && !allProducts.find(p => p.name === it.name)) {
@@ -90,7 +89,7 @@ export default function InvoiceForm() {
   const updItem = (id,f,v) => upd('items', form.items.map(i=>i.id===id?{...i,[f]:['qty','rate'].includes(f)?parse(v):v}:i))
 
   // payments
-  const addPmt  = () => upd('payments', [...form.payments, { amount:'', date:today(), method:'Bank transfer', note:'' }])
+  const addPmt  = () => upd('payments', [...form.payments, { amount:'', date:today(), method:'Transfer bank', note:'' }])
   const rmvPmt  = i  => upd('payments', form.payments.filter((_,j)=>j!==i))
   const updPmt  = (i,f,v) => upd('payments', form.payments.map((p,j)=>j===i?{...p,[f]:v}:p))
 
@@ -110,7 +109,6 @@ export default function InvoiceForm() {
   }
   const clearSig = () => { sigRef.current?.clear(); upd('sigData', null) }
 
-  // load existing signature into canvas
   useEffect(() => {
     if (showSig && form.sigData && sigRef.current) {
       sigRef.current.fromDataURL(form.sigData)
@@ -124,12 +122,10 @@ export default function InvoiceForm() {
       status: calc.status, id: form.id || undefined }
     saveInvoice(inv)
 
-    // auto-save client
     if (form.clientName && !allClients.find(c => c.name === form.clientName)) {
       ClientDB.save({ name: form.clientName, email: form.clientEmail, phone: form.clientPhone, addr: form.clientAddr, npwp: form.clientNpwp })
     }
 
-    // auto-save products to catalog
     autoSaveProducts()
 
     setCurrentInvoice(inv)
@@ -158,13 +154,13 @@ export default function InvoiceForm() {
       {/* topbar */}
       <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3"
         style={{ background: prof.color||'#085041' }}>
-        <button onClick={() => navigate('dashboard')} className="text-white/70 hover:text-white bg-none border-none cursor-pointer" aria-label="Back">
+        <button onClick={() => navigate('dashboard')} className="text-white/70 hover:text-white bg-none border-none cursor-pointer" aria-label="Kembali">
           <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         </button>
         <span className="flex-1 text-[15px] font-medium text-white">
           {currentInvoice?.id ? 'Ubah faktur' : 'Faktur baru'}
         </span>
-        <button onClick={doPreview} className="text-white/70 hover:text-white bg-none border-none cursor-pointer" aria-label="Preview">
+        <button onClick={doPreview} className="text-white/70 hover:text-white bg-none border-none cursor-pointer" aria-label="Pratinjau">
           <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
@@ -173,11 +169,11 @@ export default function InvoiceForm() {
 
         {/* meta */}
         <div className="bg-white border-b border-slate-200 px-4 py-3 grid grid-cols-2 gap-3">
-          <div><label className={labelCls}>Invoice no.</label>
+          <div><label className={labelCls}>No. faktur</label>
             <input className={inputCls} value={form.num} onChange={e=>upd('num',e.target.value)}/></div>
-          <div><label className={labelCls}>Date</label>
+          <div><label className={labelCls}>Tanggal</label>
             <input className={inputCls} type="date" value={form.date} onChange={e=>upd('date',e.target.value)}/></div>
-          <div className="col-span-2"><label className={labelCls}>Due date</label>
+          <div className="col-span-2"><label className={labelCls}>Jatuh tempo</label>
             <input className={inputCls} type="date" value={form.due} onChange={e=>upd('due',e.target.value)}/></div>
         </div>
 
@@ -187,12 +183,11 @@ export default function InvoiceForm() {
           title="Pelanggan">
           <div className="flex flex-col gap-2 pt-2">
             <div className="relative">
-              <label className={labelCls}>Client name *</label>
+              <label className={labelCls}>Nama pelanggan *</label>
               <input className={inputCls} value={clientQuery} placeholder="PT. atau nama — ketik untuk cari"
                 onChange={e => { setClientQuery(e.target.value); upd('clientName', e.target.value); setShowClients(true) }}
                 onFocus={() => setShowClients(true)}
                 onBlur={() => setTimeout(() => setShowClients(false), 200)}/>
-              {/* autocomplete dropdown */}
               {showClients && filteredClients.length > 0 && clientQuery.length > 0 && (
                 <div className="absolute top-full left-0 right-0 z-20 bg-white border border-slate-200 rounded-lg shadow-lg mt-1 max-h-40 overflow-y-auto">
                   {filteredClients.slice(0, 5).map((c, i) => (
@@ -206,14 +201,14 @@ export default function InvoiceForm() {
               )}
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <div><label className={labelCls}>Email <span className="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded-full">optional</span></label>
+              <div><label className={labelCls}>Email <span className="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded-full">opsional</span></label>
                 <input className={inputCls} type="email" value={form.clientEmail} placeholder="email@..."
                   onChange={e=>upd('clientEmail',e.target.value)}/></div>
-              <div><label className={labelCls}>Phone</label>
+              <div><label className={labelCls}>Telepon</label>
                 <input className={inputCls} value={form.clientPhone} placeholder="+62..."
                   onChange={e=>upd('clientPhone',e.target.value)}/></div>
             </div>
-            <div><label className={labelCls}>Address</label>
+            <div><label className={labelCls}>Alamat</label>
               <textarea className={inputCls} rows={2} value={form.clientAddr} placeholder="Jalan, kota..."
                 onChange={e=>upd('clientAddr',e.target.value)}/></div>
             <div><label className={labelCls}>NPWP</label>
@@ -237,7 +232,7 @@ export default function InvoiceForm() {
                       onBlur={() => setTimeout(() => setShowProductPicker(null), 200)} />
                     {showProductPicker === it.id && filteredProducts.length > 0 && (
                       <div className="absolute top-full left-0 right-0 z-20 bg-white border border-slate-200 rounded-lg shadow-lg mt-1 max-h-36 overflow-y-auto">
-                        <div className="px-2 py-1.5 text-[9px] uppercase tracking-wider text-slate-400 bg-slate-50 border-b border-slate-100">Product catalog</div>
+                        <div className="px-2 py-1.5 text-[9px] uppercase tracking-wider text-slate-400 bg-slate-50 border-b border-slate-100">Katalog produk</div>
                         {filteredProducts.slice(0, 6).map(p => (
                           <button key={p.id} onMouseDown={e => { e.preventDefault(); pickProduct(it.id, p) }}
                             className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 border-b border-slate-100 last:border-0 bg-transparent cursor-pointer">
@@ -256,13 +251,13 @@ export default function InvoiceForm() {
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2 mt-2">
-                  <div><label className={labelCls}>Description</label>
+                  <div><label className={labelCls}>Deskripsi</label>
                     <input className={inputCls} value={it.desc} placeholder="Opsional"
                       onChange={e=>updItem(it.id,'desc',e.target.value)}/></div>
-                  <div><label className={labelCls}>Qty</label>
+                  <div><label className={labelCls}>Jml</label>
                     <input className={inputCls} type="number" min="0" value={it.qty}
                       onChange={e=>updItem(it.id,'qty',e.target.value)}/></div>
-                  <div><label className={labelCls}>Rate (IDR)</label>
+                  <div><label className={labelCls}>Harga (IDR)</label>
                     <input className={inputCls} type="number" min="0" value={it.rate||''}
                       placeholder="0" onChange={e=>updItem(it.id,'rate',e.target.value)}/></div>
                 </div>
@@ -270,7 +265,7 @@ export default function InvoiceForm() {
                   <select className="text-[11px] px-2 py-1 rounded-lg border border-slate-200 bg-white text-slate-500"
                     value={it.type} onChange={e=>updItem(it.id,'type',e.target.value)}>
                     <option value="service">Jasa</option>
-                    <option value="product">Barang / Reimburse</option>
+                    <option value="product">Barang</option>
                   </select>
                   <span className="text-[12px] font-medium text-slate-700">= {fmtIDR(it.qty*it.rate)}</span>
                 </div>
@@ -279,7 +274,7 @@ export default function InvoiceForm() {
             <button onClick={addItem}
               className="flex items-center justify-center gap-1.5 w-full py-2.5 border border-dashed rounded-lg text-[12px] bg-none cursor-pointer hover:bg-green-50"
               style={{ borderColor: brandColor, color: brandColor }}>
-              + Tambah item
+              + Tambah barang
             </button>
             <div className="flex justify-between text-[13px] font-medium text-slate-800 pt-1 border-t border-slate-200">
               <span>Subtotal</span><span>{fmtIDR(calc.subtotal)}</span>
@@ -312,7 +307,7 @@ export default function InvoiceForm() {
           icon={ic('<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>')}
           title="Pajak (PPN)">
           <div className="mt-3">
-            <label className={labelCls}>Tax rate (%)</label>
+            <label className={labelCls}>Tarif pajak (%)</label>
             <input className={inputCls} type="number" min="0" max="100" value={form.taxPct||''}
               placeholder="11" onChange={e=>upd('taxPct',parse(e.target.value))}/>
           </div>
@@ -323,7 +318,7 @@ export default function InvoiceForm() {
           icon={ic('<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>')}
           title="Ongkos kirim">
           <div className="mt-3">
-            <label className={labelCls}>Shipping charge (IDR)</label>
+            <label className={labelCls}>Biaya pengiriman (IDR)</label>
             <input className={inputCls} type="number" min="0" value={form.shipping||''}
               placeholder="0" onChange={e=>upd('shipping',parse(e.target.value))}/>
           </div>
@@ -333,7 +328,7 @@ export default function InvoiceForm() {
         <div className="bg-white mt-2 border-t border-b border-slate-200 px-4 py-3 space-y-1.5">
           <div className="flex justify-between text-[13px] text-slate-500"><span>Subtotal</span><span>{fmtIDR(calc.subtotal)}</span></div>
           {calc.discount>0 && <div className="flex justify-between text-[13px] text-slate-500"><span>Diskon</span><span>−{fmtIDR(calc.discount)}</span></div>}
-          {calc.tax>0      && <div className="flex justify-between text-[13px] text-slate-500"><span>Tax ({form.taxPct}%)</span><span>{fmtIDR(calc.tax)}</span></div>}
+          {calc.tax>0      && <div className="flex justify-between text-[13px] text-slate-500"><span>Pajak ({form.taxPct}%)</span><span>{fmtIDR(calc.tax)}</span></div>}
           {form.shipping>0 && <div className="flex justify-between text-[13px] text-slate-500"><span>Ongkos kirim</span><span>{fmtIDR(form.shipping)}</span></div>}
           <div className="flex justify-between text-[16px] font-medium text-slate-800 pt-2 border-t border-slate-200"><span>Total</span><span>{fmtIDR(calc.total)}</span></div>
         </div>
@@ -352,17 +347,17 @@ export default function InvoiceForm() {
                   </button>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div><label className={labelCls}>Amount (IDR)</label>
+                  <div><label className={labelCls}>Jumlah (IDR)</label>
                     <input className={inputCls} type="number" min="0" value={p.amount||''}
                       placeholder="0" onChange={e=>updPmt(i,'amount',e.target.value)}/></div>
-                  <div><label className={labelCls}>Date</label>
+                  <div><label className={labelCls}>Tanggal</label>
                     <input className={inputCls} type="date" value={p.date}
                       onChange={e=>updPmt(i,'date',e.target.value)}/></div>
-                  <div><label className={labelCls}>Method</label>
+                  <div><label className={labelCls}>Metode</label>
                     <select className={inputCls} value={p.method} onChange={e=>updPmt(i,'method',e.target.value)}>
-                      {['Cash','Bank transfer','QRIS','Credit card','Other'].map(m=><option key={m}>{m}</option>)}
+                      {['Tunai','Transfer bank','QRIS','Kartu kredit','Lainnya'].map(m=><option key={m}>{m}</option>)}
                     </select></div>
-                  <div><label className={labelCls}>Note</label>
+                  <div><label className={labelCls}>Catatan</label>
                     <input className={inputCls} value={p.note||''} placeholder="Opsional"
                       onChange={e=>updPmt(i,'note',e.target.value)}/></div>
                 </div>
@@ -411,7 +406,7 @@ export default function InvoiceForm() {
               + Tambah catatan
             </button>
             <div className="flex gap-2 flex-wrap">
-              {['Thank you for your business!','Payment due within 30 days.','Bank BCA 123-456-7890'].map(t=>(
+              {['Terima kasih atas kepercayaan Anda!','Pembayaran jatuh tempo dalam 30 hari.','Bank BCA 123-456-7890'].map(t=>(
                 <button key={t} onClick={()=>{ upd('notes',[...form.notes,{type:'footer',text:t}]); if(!open.has('notes')) toggleSec('notes') }}
                   className="text-[10px] px-2.5 py-1 border border-slate-200 rounded-full bg-white text-slate-500 cursor-pointer hover:bg-slate-50">{t.slice(0,24)}…</button>
               ))}
@@ -427,7 +422,7 @@ export default function InvoiceForm() {
             {form.sigData ? (
               <div className="flex flex-col items-center gap-2">
                 <div className="border border-slate-200 rounded-lg p-2 bg-slate-50">
-                  <img src={form.sigData} alt="Signature" className="max-h-16 max-w-[200px] object-contain"/>
+                  <img src={form.sigData} alt="Tanda tangan" className="max-h-16 max-w-[200px] object-contain"/>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => { upd('sigData', null); setShowSig(true) }}
@@ -448,7 +443,7 @@ export default function InvoiceForm() {
               </button>
             )}
             <div>
-              <label className={labelCls}>Signed by</label>
+              <label className={labelCls}>Ditandatangani oleh</label>
               <input className={inputCls} value={form.sigName||''} placeholder="Nama penanda tangan"
                 onChange={e=>upd('sigName',e.target.value)}/>
             </div>
@@ -463,13 +458,13 @@ export default function InvoiceForm() {
           className="flex flex-col items-center gap-0.5 py-2 rounded-xl border-none text-white text-[11px] font-medium cursor-pointer"
           style={{ background: brandColor }}>
           <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          Save
+          Simpan
         </button>
         {[
-          { label:'Send',  icon:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',  action:() => { doSave(); } },
-          { label:'Print', icon:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
-            action:() => { const inv={...form,discountType:discType,...calc}; import('../utils/pdf').then(m=>m.printInvoice(inv,prof)) } },
-          { label:'More',  icon:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>', action:() => showToast('Opsi lainnya segera hadir') },
+          { label:'Kirim',  icon:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',  action:() => { doSave(); } },
+          { label:'Cetak', icon:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+            action:() => { const inv={...form,discountType:discType,...calc}; import('../utils/pdf').then(m=>m.printInvoice(inv,prof,prof.invoiceTemplate||'classic')) } },
+          { label:'Lain',  icon:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>', action:() => showToast('Opsi lainnya segera hadir') },
         ].map(b => (
           <button key={b.label} onClick={b.action}
             className="flex flex-col items-center gap-0.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-600 text-[11px] font-medium cursor-pointer hover:bg-slate-50">
@@ -485,7 +480,7 @@ export default function InvoiceForm() {
           <div className="bg-white rounded-t-2xl w-full max-w-md pb-6">
             <div className="w-9 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2"/>
             <div className="px-4 pb-3 flex items-center justify-between">
-              <span className="text-[15px] font-medium text-slate-800">Draw your signature</span>
+              <span className="text-[15px] font-medium text-slate-800">Gambar tanda tangan Anda</span>
               <button onClick={() => sigRef.current?.clear()}
                 className="text-[12px] text-slate-400 bg-none border-none cursor-pointer">Bersihkan</button>
             </div>
@@ -503,7 +498,7 @@ export default function InvoiceForm() {
               </button>
               <button onClick={() => setShowSig(false)}
                 className="flex-1 py-3 rounded-xl border border-slate-200 bg-white text-slate-500 cursor-pointer">
-                Cancel
+                Batal
               </button>
             </div>
           </div>

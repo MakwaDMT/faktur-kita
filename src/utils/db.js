@@ -18,7 +18,7 @@ export const ProfileDB = {
   get: () => read(KEYS.profile) || {
     bizName: '', phone: '', email: '', addr: '', city: '', web: '',
     npwp: '', nib: '', taxrate: '11', terms: '30',
-    defnote: 'Thank you for your business!',
+    defnote: 'Terima kasih atas kepercayaan Anda!',
     color: '#085041', logo: null,
     banks: [],
     invPrefix: 'INV', invSep1: '-', invYear: new Date().getFullYear().toString(),

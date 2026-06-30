@@ -28,7 +28,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <div className="text-white/60 text-[12px]">{t('welcomeBack')}</div>
-            <div className="text-white font-medium text-[17px]">{profile?.bizName || 'My Business'}</div>
+            <div className="text-white font-medium text-[17px]">{profile?.bizName || 'Faktur Kita'}</div>
           </div>
           <button onClick={() => navigate('invoice-form')}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 text-white text-[12px] font-medium border-none cursor-pointer">
