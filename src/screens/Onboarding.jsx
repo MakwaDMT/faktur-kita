@@ -532,7 +532,7 @@ export function SettingsScreen() {
   const { navigate, profile, showToast, trialDays, lang, setLang } = useApp()
   const fileRef = useRef(null)
 
-  const doKembaliup = () => {
+  const doBackup = () => {
     const data = InvoiceDB.backup()
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
     const a = document.createElement('a'); a.href=URL.createObjectURL(blob)
@@ -581,28 +581,28 @@ export function SettingsScreen() {
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Bisnis</div>
       <div className="bg-white border-t border-b border-slate-200">
-        <Row icon="🏪" title="Business profile" sub={profile?.bizName || 'Belum diatur'} onClick={() => navigate('profile')} />
-        <Row icon="🎨" title="Brand color & theme" sub={profile?.themeName || profile?.color || '#085041'} onClick={() => navigate('profile')} />
-        <Row icon="📄" title="Invoice settings" sub="Format nomor · Tarif pajak · Tempo" onClick={() => navigate('profile')} />
-        <Row icon="📦" title="Product catalog" sub={`${ProductDB.getAll().length} produk tersimpan`} onClick={() => navigate('products')} />
+        <Row icon="🏪" title="Profil bisnis" sub={profile?.bizName || 'Belum diatur'} onClick={() => navigate('profile')} />
+        <Row icon="🎨" title="Warna & tema brand" sub={profile?.themeName || profile?.color || '#085041'} onClick={() => navigate('profile')} />
+        <Row icon="📄" title="Pengaturan faktur" sub="Format nomor · Tarif pajak · Tempo" onClick={() => navigate('profile')} />
+        <Row icon="📦" title="Katalog produk" sub={`${ProductDB.getAll().length} produk tersimpan`} onClick={() => navigate('products')} />
       </div>
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Pembayaran</div>
       <div className="bg-white border-t border-b border-slate-200">
-        <Row icon="💳" title="Midtrans gateway" sub="Belum terhubung — ketuk untuk atur" onClick={() => showToast('Midtrans setup — coming in next update')} />
-        <Row icon="🏦" title="Bank accounts" sub={(profile?.banks||[]).length > 0 ? `${profile.banks.length} rekening` : 'Belum ada rekening'} onClick={() => navigate('profile')} />
+        <Row icon="💳" title="Gerbang pembayaran Midtrans" sub="Belum terhubung — ketuk untuk atur" onClick={() => showToast('Pengaturan Midtrans — segera hadir')} />
+        <Row icon="🏦" title="Rekening bank" sub={(profile?.banks||[]).length > 0 ? `${profile.banks.length} rekening` : 'Belum ada rekening'} onClick={() => navigate('profile')} />
       </div>
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Data</div>
       <div className="bg-white border-t border-b border-slate-200">
-        <Row icon="💾" title="Export backup" sub="Unduh semua data sebagai JSON" onClick={doKembaliup} />
-        <Row icon="📥" title="Import backup" sub="Pulihkan dari file JSON" onClick={() => fileRef.current?.click()} />
+        <Row icon="💾" title="Ekspor cadangan" sub="Unduh semua data sebagai JSON" onClick={doBackup} />
+        <Row icon="📥" title="Impor cadangan" sub="Pulihkan dari file JSON" onClick={() => fileRef.current?.click()} />
         <input ref={fileRef} type="file" accept=".json" onChange={doRestore} className="hidden" />
       </div>
 
       <div className="mt-2 text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">Akun</div>
       <div className="bg-white border-t border-b border-slate-200">
-        <Row icon="👑" title="Subscription" sub={`Uji coba gratis — ${trialDays} hari tersisa`} subColor="#854F0B" onClick={() => navigate('paywall')} />
+        <Row icon="👑" title="Langganan" sub={`Uji coba gratis — ${trialDays} hari tersisa`} subColor="#854F0B" onClick={() => navigate('paywall')} />
         <Row icon="🌐" title="Language / Bahasa"
           sub={lang === 'id' ? 'Bahasa Indonesia' : 'English'}
           onClick={() => {
@@ -611,14 +611,13 @@ export function SettingsScreen() {
             showToast(newLang === 'id' ? 'Bahasa Indonesia dipilih ✓' : 'English selected ✓')
             setTimeout(() => window.location.reload(), 800)
           }} />
-        <Row icon="📋" title="Terms & Privacy Policy" sub="Hukum yang berlaku: Republik Indonesia" onClick={() => showToast('Opening terms…')} />
+        <Row icon="📋" title="Syarat & Kebijakan Privasi" sub="Hukum yang berlaku: Republik Indonesia" onClick={() => showToast('Membuka syarat & ketentuan…')} />
       </div>
 
       <div className="mt-6 text-center text-[10px] text-slate-400 leading-relaxed px-4">
         Faktur Kita v1.1.0<br/>
         © 2026 · Hak cipta dilindungi<br/>
-        AI-assisted with Claude (Anthropic)<br/>
-        Protected under UU No. 28 Tahun 2014 tentang Hak Cipta
+        Dilindungi UU No. 28 Tahun 2014 tentang Hak Cipta
       </div>
     </div>
   )
