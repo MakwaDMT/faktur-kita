@@ -48,7 +48,7 @@ export function buildInvoiceHTML(invoice, profile, template = 'classic') {
   const rawBg    = profile?.color || '#085041'
   const isWhite  = rawBg === '#ffffff' || rawBg === '#F8FAFC'
   const bg       = isWhite ? '#085041' : rawBg
-  const bizName  = profile?.bizName || 'My Business'
+  const bizName  = profile?.bizName || 'Nama Usaha Anda'
   const bizEmail = profile?.email || ''
   const bizPhone = profile?.phone || ''
   const bizAddr  = profile?.addr || ''
@@ -123,11 +123,11 @@ export function buildInvoiceHTML(invoice, profile, template = 'classic') {
   }
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Invoice ${num}</title>
+<title>${docTitle} ${num}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -349,7 +349,7 @@ ${payments && payments.length ? `
 
 ${footerNotes.length ? `
 <div class="notes-sec">
-  <div class="sec-title">Notes</div>
+  <div class="sec-title">Catatan</div>
   ${footerNotes.map(n => `<div class="note-text">${n.text}</div>`).join('')}
 </div>` : ''}
 
@@ -372,7 +372,7 @@ ${footerNotes.length ? `
       ${sigData ? `<img src="${sigData}" style="max-height:38px;max-width:130px;object-fit:contain"/>` : ''}
     </div>
     <div class="sig-name">${sigName || ''}</div>
-    <div class="sig-by">${sigName ? date : 'Signed by'}</div>
+    <div class="sig-by">${sigName ? date : 'Ditandatangani oleh'}</div>
   </div>
 </div>
 
@@ -417,38 +417,39 @@ _${bizName}_`
 export function exportExcel(invoices, filename) {
   import('xlsx').then(XLSX => {
     const data = invoices.map(i => ({
-      'Invoice No': i.num || '',
-      'Client': i.clientName || '',
-      'Date': i.date || '',
-      'Due Date': i.due || '',
-      'Items': (i.items||[]).length,
+      'No. Faktur': i.num || '',
+      'Pelanggan': i.clientName || '',
+      'Tanggal': i.date || '',
+      'Jatuh Tempo': i.due || '',
+      'Barang': (i.items||[]).length,
       'Subtotal': i.subtotal || 0,
-      'Discount': i.discount || 0,
-      'Tax': i.tax || 0,
-      'Shipping': i.shipping || 0,
+      'Diskon': i.discount || 0,
+      'Pajak': i.tax || 0,
+      'Ongkir': i.shipping || 0,
       'Total': i.total || 0,
-      'Paid': i.paid || 0,
-      'Balance': (i.total||0) - (i.paid||0),
+      'Dibayar': i.paid || 0,
+      'Sisa': (i.total||0) - (i.paid||0),
       'Status': i.status || '',
     }))
 
     // add summary row
     const totals = data.reduce((s, r) => ({
       Total: s.Total + r.Total,
-      Paid: s.Paid + r.Paid,
-      Balance: s.Balance + r.Balance,
-    }), { Total:0, Paid:0, Balance:0 })
+      Dibayar: s.Dibayar + r.Dibayar,
+      Sisa: s.Sisa + r.Sisa,
+    }), { Total:0, Dibayar:0, Sisa:0 })
 
     data.push({
-      'Invoice No': '',
-      'Client': `TOTAL (${data.length} invoices)`,
-      'Date': '', 'Due Date': '', 'Items': '',
-      'Subtotal': '', 'Discount': '', 'Tax': '', 'Shipping': '',
+      'No. Faktur': '',
+      'Pelanggan': `TOTAL (${data.length} faktur)`,
+      'Tanggal': '', 'Jatuh Tempo': '', 'Barang': '',
+      'Subtotal': '', 'Diskon': '', 'Pajak': '', 'Ongkir': '',
       'Total': totals.Total,
-      'Paid': totals.Paid,
-      'Balance': totals.Balance,
+      'Dibayar': totals.Dibayar,
+      'Sisa': totals.Sisa,
       'Status': '',
     })
+
 
     const ws = XLSX.utils.json_to_sheet(data)
     const wb = XLSX.utils.book_new()
