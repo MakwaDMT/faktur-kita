@@ -288,7 +288,7 @@ ${headerNotes.length ? `
 </div>` : ''}
 
 <div class="sec">
-  <div class="sec-title">Items &amp; services</div>
+  <div class="sec-title">Barang &amp; jasa</div>
   <table class="items">
     <thead><tr>
       <th style="width:22px">#</th>
@@ -316,9 +316,9 @@ ${headerNotes.length ? `
 <div class="totals-wrap">
   <div class="totals-box">
     <div class="tl"><span>Subtotal</span><span>${(subtotal||0).toLocaleString('id-ID')}</span></div>
-    ${discount > 0 ? `<div class="tl"><span>Discount${discountPct ? ` (${discountPct}%)` : ''}</span><span>−${(discount||0).toLocaleString('id-ID')}</span></div>` : ''}
-    ${tax > 0 ? `<div class="tl"><span>Tax (PPN ${taxPct}%)</span><span>${(tax||0).toLocaleString('id-ID')}</span></div>` : ''}
-    ${shipping > 0 ? `<div class="tl"><span>Shipping</span><span>${(shipping||0).toLocaleString('id-ID')}</span></div>` : ''}
+    ${discount > 0 ? `<div class="tl"><span>Diskon${discountPct ? ` (${discountPct}%)` : ''}</span><span>−${(discount||0).toLocaleString('id-ID')}</span></div>` : ''}
+    ${tax > 0 ? `<div class="tl"><span>Pajak (PPN ${taxPct}%)</span><span>${(tax||0).toLocaleString('id-ID')}</span></div>` : ''}
+    ${shipping > 0 ? `<div class="tl"><span>Ongkos kirim</span><span>${(shipping||0).toLocaleString('id-ID')}</span></div>` : ''}
     <div class="tl grand"><span>Total</span><span>IDR ${(total||0).toLocaleString('id-ID')}</span></div>
   </div>
 </div>
