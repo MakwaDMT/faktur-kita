@@ -33,6 +33,15 @@ const THEMES = [
 
 const CATEGORIES = ['Nature','Blue','Warm','Dark','Light']
 
+// Defined OUTSIDE Profile() so it's stable across re-renders —
+// keeping it inside the component caused inputs to lose focus on every keystroke.
+const Sec = ({ title, children }) => (
+  <div className="mt-2 bg-white border-t border-b border-slate-200">
+    <div className="text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">{title}</div>
+    <div className="px-4 pb-4 flex flex-col gap-3">{children}</div>
+  </div>
+)
+
 const isDark = h => {
   if (!h || h.length < 7) return true
   const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16)
@@ -114,15 +123,8 @@ export default function Profile() {
     setShowBankForm(false)
   }
 
-  const inputCls = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 bg-white focus:outline-tanpa focus:border-[#085041] focus:ring-2 focus:ring-[#085041]/10"
+  const inputCls = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 bg-white focus:outline-none focus:border-[#085041] focus:ring-2 focus:ring-[#085041]/10"
   const labelCls = "text-[11px] text-slate-400 mb-1 block"
-
-  const Sec = ({ title, children }) => (
-    <div className="mt-2 bg-white border-t border-b border-slate-200">
-      <div className="text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2">{title}</div>
-      <div className="px-4 pb-4 flex flex-col gap-3">{children}</div>
-    </div>
-  )
 
   const dark = isDark(f.color)
   const hText = dark ? '#ffffff' : '#111111'

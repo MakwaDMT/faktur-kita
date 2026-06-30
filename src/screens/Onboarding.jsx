@@ -5,6 +5,22 @@ import { StatusPill } from '../components/UI'
 import { InvoiceDB, ClientDB, ProductDB, fmtIDR, fmtShort, initials } from '../utils/db'
 import { printInvoice, buildWhatsAppMsg, exportExcel } from '../utils/pdf'
 
+// Defined at module scope (not inside SettingsScreen) so it stays stable across re-renders.
+const Row = ({ icon, title, sub, subColor, onClick }) => (
+  <button onClick={onClick}
+    className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-100 bg-none cursor-pointer text-left hover:bg-slate-50 last:border-b-0">
+    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+      style={{ background:'#E1F5EE' }}>
+      <span className="text-lg">{icon}</span>
+    </div>
+    <div className="flex-1">
+      <div className="text-[13px] font-medium text-slate-800">{title}</div>
+      {sub && <div className="text-[11px] mt-0.5" style={{ color: subColor||'#94a3b8' }}>{sub}</div>}
+    </div>
+    <svg width="16" height="16" fill="none" stroke="#cbd5e1" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+)
+
 export function OnboardingScreen() {
   const { completeOnboarding, navigate, profile } = useApp()
   const [slide, setSlide] = useState(0)
@@ -558,20 +574,6 @@ export function SettingsScreen() {
     e.target.value = ''
   }
 
-  const Row = ({ icon, title, sub, subColor, onClick }) => (
-    <button onClick={onClick}
-      className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-100 bg-none cursor-pointer text-left hover:bg-slate-50 last:border-b-0">
-      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-        style={{ background:'#E1F5EE' }}>
-        <span className="text-lg">{icon}</span>
-      </div>
-      <div className="flex-1">
-        <div className="text-[13px] font-medium text-slate-800">{title}</div>
-        {sub && <div className="text-[11px] mt-0.5" style={{ color: subColor||'#94a3b8' }}>{sub}</div>}
-      </div>
-      <svg width="16" height="16" fill="none" stroke="#cbd5e1" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-  )
 
   return (
     <div className="flex flex-col min-h-full pb-8">
