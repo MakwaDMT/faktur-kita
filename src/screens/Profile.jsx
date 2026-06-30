@@ -316,8 +316,8 @@ export default function Profile() {
                   {f.logo ? <img src={f.logo} className="w-full h-full object-cover rounded" alt=""/> : <span style={{color:hText}}>🏪</span>}
                 </div>
                 <div className="flex-1">
-                  <div className="text-[10px] font-medium" style={{ color: hText }}>{f.bizName || 'Your Business'}</div>
-                  <div className="text-[8px]" style={{ color: hSub }}>INVOICE</div>
+                  <div className="text-[10px] font-medium" style={{ color: hText }}>{f.bizName || 'Nama Usaha Anda'}</div>
+                  <div className="text-[8px]" style={{ color: hSub }}>FAKTUR</div>
                 </div>
                 <div className="text-[10px] font-medium" style={{ color: hText }}>IDR 5.000.000</div>
               </div>
@@ -331,7 +331,7 @@ export default function Profile() {
               {/* mini table */}
               <div className="px-3 py-2 bg-white">
                 <div className="flex justify-between text-[9px] text-slate-400 pb-1 border-b border-slate-100">
-                  <span>Item</span><span>Amount</span>
+                  <span>Barang</span><span>Jumlah</span>
                 </div>
                 <div className="flex justify-between text-[9px] text-slate-600 py-1">
                   <span>Jasa Desain</span><span>5.000.000</span>
@@ -342,7 +342,7 @@ export default function Profile() {
               </div>
               {/* mini balance */}
               <div className="flex items-center justify-between px-3 py-1.5" style={{ background: f.color }}>
-                <span className="text-[8px] uppercase" style={{ color: hSub }}>Balance due</span>
+                <span className="text-[8px] uppercase" style={{ color: hSub }}>Sisa tagihan</span>
                 <span className="text-[10px] font-medium" style={{ color: hText }}>IDR 2.000.000</span>
               </div>
             </div>
