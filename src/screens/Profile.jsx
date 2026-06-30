@@ -159,7 +159,7 @@ export default function Profile() {
                   <span className="text-[9px]" style={{ color: hSub }}>ketuk untuk unggah</span>
                 </div>}
           </div>
-          <div className="font-medium text-[17px]" style={{ color: hText }}>{f.bizName||'Your Business Name'}</div>
+          <div className="font-medium text-[17px]" style={{ color: hText }}>{f.bizName||'Nama Usaha Anda'}</div>
           <div className="text-[12px]" style={{ color: hSub }}>{f.phone||'+62 ...'}</div>
           <div className="flex gap-2">
             <button onClick={triggerLogo} className="text-[11px] px-3 py-1.5 rounded-full border cursor-pointer"
@@ -207,12 +207,12 @@ export default function Profile() {
             <p className="text-[10px] text-slate-400 mt-1">Memungkinkan kirim faktur via email</p>
           </div>
           <div>
-            <label className={labelCls}>Address</label>
+            <label className={labelCls}>Alamat</label>
             <textarea className={inputCls} rows={2} value={f.addr} placeholder="Jl. ..." onChange={e=>upd('addr',e.target.value)}/>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelCls}>City</label>
+              <label className={labelCls}>Kota</label>
               <input className={inputCls} value={f.city} placeholder="Jakarta" onChange={e=>upd('city',e.target.value)}/>
             </div>
             <div>

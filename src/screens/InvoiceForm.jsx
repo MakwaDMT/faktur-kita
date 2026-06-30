@@ -29,6 +29,7 @@ export default function InvoiceForm() {
   const [open,    setOpen]    = useState(new Set(['client','items']))
   const [discType,setDiscType]= useState(form.discountType || 'fixed')
   const [showSig, setShowSig] = useState(false)
+  const [showMore, setShowMore] = useState(false)
 
   // client autocomplete
   const [clientQuery, setClientQuery] = useState(form.clientName || '')
@@ -464,7 +465,7 @@ export default function InvoiceForm() {
           { label:'Kirim',  icon:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',  action:() => { doSave(); } },
           { label:'Cetak', icon:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
             action:() => { const inv={...form,discountType:discType,...calc}; import('../utils/pdf').then(m=>m.printInvoice(inv,prof,prof.invoiceTemplate||'classic')) } },
-          { label:'Lain',  icon:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>', action:() => showToast('Opsi lainnya segera hadir') },
+          { label:'Lain',  icon:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>', action:() => setShowMore(true) },
         ].map(b => (
           <button key={b.label} onClick={b.action}
             className="flex flex-col items-center gap-0.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-600 text-[11px] font-medium cursor-pointer hover:bg-slate-50">
@@ -498,6 +499,39 @@ export default function InvoiceForm() {
               </button>
               <button onClick={() => setShowSig(false)}
                 className="flex-1 py-3 rounded-xl border border-slate-200 bg-white text-slate-500 cursor-pointer">
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* more options modal */}
+      {showMore && (
+        <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50" onClick={e => e.target===e.currentTarget && setShowMore(false)}>
+          <div className="bg-white rounded-t-2xl w-full max-w-md pb-6">
+            <div className="w-9 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2"/>
+            <div className="px-4 pb-3 text-[15px] font-medium text-slate-800">Opsi lainnya</div>
+            {[
+              { icon:'📄', label:'Lihat sebagai Penawaran', sub:'Jadikan dokumen ini penawaran (quotation)',
+                action: () => { setShowMore(false); upd('docType','quotation'); showToast('Diubah jadi Penawaran ✓') } },
+              { icon:'📊', label:'Ekspor ke Excel', sub:'Unduh faktur ini sebagai file Excel',
+                action: () => { setShowMore(false); import('../utils/pdf').then(m => m.exportExcel([{...form,discountType:discType,...calc}], `${form.num}.xlsx`)); showToast('Excel diunduh ✓') } },
+              { icon:'🗑️', label:'Hapus draf ini', sub:'Kosongkan formulir dan mulai baru',
+                action: () => { if(window.confirm('Hapus draf faktur ini?')) { setForm(blank); setShowMore(false); showToast('Draf dihapus') } } },
+            ].map(opt => (
+              <button key={opt.label} onClick={opt.action}
+                className="w-full flex items-center gap-3 px-4 py-3 border-t border-slate-100 bg-none cursor-pointer text-left hover:bg-slate-50">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-slate-50">{opt.icon}</div>
+                <div className="flex-1">
+                  <div className="text-[13px] font-medium text-slate-800">{opt.label}</div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">{opt.sub}</div>
+                </div>
+                <svg width="16" height="16" fill="none" stroke="#cbd5e1" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            ))}
+            <div className="px-4 mt-3">
+              <button onClick={() => setShowMore(false)}
+                className="w-full py-3 rounded-xl border border-slate-200 bg-white text-slate-500 text-[13px] cursor-pointer">
                 Batal
               </button>
             </div>

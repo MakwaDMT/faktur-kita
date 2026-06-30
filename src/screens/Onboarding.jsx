@@ -604,8 +604,12 @@ export function SettingsScreen() {
       <div className="bg-white border-t border-b border-slate-200">
         <Row icon="👑" title="Langganan" sub={`Uji coba gratis — ${trialDays} hari tersisa`} subColor="#854F0B" onClick={() => navigate('paywall')} />
         <Row icon="🌐" title="Bahasa / Language"
-          sub="Bahasa Indonesia"
-          onClick={() => showToast('Mode Bahasa Inggris sedang dikembangkan')} />
+          sub={lang === 'id' ? 'Bahasa Indonesia' : 'English (partial)'}
+          onClick={() => {
+            const newLang = lang === 'id' ? 'en' : 'id'
+            setLang(newLang)
+            showToast(newLang === 'id' ? 'Bahasa Indonesia ✓' : 'English ✓ (beberapa bagian masih Indonesia)')
+          }} />
         <Row icon="📋" title="Syarat & Kebijakan Privasi" sub="Hukum yang berlaku: Republik Indonesia" onClick={() => showToast('Membuka syarat & ketentuan…')} />
       </div>
 
